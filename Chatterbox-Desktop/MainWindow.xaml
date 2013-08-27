@@ -1,0 +1,18 @@
+﻿<metro:Window x:Class="Chatterbox.Gui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:metro="clr-namespace:Elysium.Controls;assembly=Elysium"
+        xmlns:Controls="clr-namespace:Chatterbox.Gui.Controls" Title="Chatterbox" Height="829" Width="1318" Loaded="Window_Loaded">
+    <Grid>
+        <TabControl HorizontalAlignment="Stretch" Name="tbControl" VerticalAlignment="Stretch" SelectionChanged="tbControl_SelectionChanged">
+            <TabItem Header="Lobby" Name="tbLobby">
+                <Grid>
+                    <Button Content="Add Room" Height="37" HorizontalAlignment="Left" Margin="24,20,0,0" Name="btnAddRoom" VerticalAlignment="Top" Width="81" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="#uclnet" Name="UclNetTabItem">
+                <Controls:ChatWindow Visibility="Visible"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</metro:Window>

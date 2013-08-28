@@ -1,0 +1,27 @@
+﻿<Window x:Class="Chatterbox.Skype.SelectContactWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SelectContactWindow" Height="409" Width="475">
+    <Grid>
+        <TabControl HorizontalAlignment="Stretch" Name="tbControl" VerticalAlignment="Stretch" SelectionChanged="tbControl_SelectionChanged">
+            <TabItem Header="Contacts" Name="tbContacts">
+                <Grid>
+                    <ListView Name="ContactListBox" HorizontalAlignment="Left" Height="330" VerticalAlignment="Top" Width="467" SelectionChanged="ListBox_SelectionChanged" ItemsSource="{Binding Contacts}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Avatar" DisplayMemberBinding="{Binding ContactImage}">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Name="Avatar"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="DisplayName" DisplayMemberBinding="{Binding ContactDisplayName}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

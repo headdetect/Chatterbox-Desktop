@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{127D3FF0-7239-45DC-A248-59C556095315}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Chatterbox.Gui</RootNamespace>
     <AssemblyName>Chatterbox.Gui</AssemblyName>
@@ -56,6 +56,9 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Elysium">
       <HintPath>libs\Elysium.dll</HintPath>
@@ -84,13 +87,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    <Compile Include="ChatItem.cs" />
     <Compile Include="Controls\ChatWindow.xaml.cs">
       <DependentUpon>ChatWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IChatHandler.cs" />
     <Compile Include="Utils\Emotoconer.cs" />
     <Page Include="Controls\AsyncImage.xaml">
       <SubType>Designer</SubType>
@@ -108,10 +109,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Controls\AsyncImage.xaml.cs">
       <DependentUpon>AsyncImage.xaml</DependentUpon>
     </Compile>
@@ -119,7 +116,6 @@
       <DependentUpon>ChatListBoxItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\StringToXAMLConverter.cs" />
-    <Compile Include="MainWindow.Logic.xaml.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -143,7 +139,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -307,16 +302,6 @@
     <Content Include="libs\Microsoft.Windows.Shell.dll" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\Chatterbox\Chatterbox.csproj">
-      <Project>{69349B65-E73E-4F43-8963-8ACB2C7442EA}</Project>
-      <Name>Chatterbox</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LibIRC\Meebey.SmartIrc4net.csproj">
-      <Project>{8E981981-5F3C-4358-9D9B-4407E6DAEE80}</Project>
-      <Name>Meebey.SmartIrc4net</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -82,16 +82,13 @@ namespace Chatterbox.Gui.Converters {
                         if ( block == null )
                             return null;
 
-                        foreach ( Inline line in block.Inlines ) {
-                            if ( line.GetType() == typeof( Hyperlink ) ) {
-                                var lnk = line as Hyperlink;
-
-                                if ( lnk == null ) {
-                                    throw new Exception( "Not sure what happened here exactly..." );
-                                }
-
-                                lnk.RequestNavigate += Hyperlink_RequestNavigateEvent;
+                        foreach (var lnk in from line in block.Inlines where line.GetType() == typeof( Hyperlink ) select line as Hyperlink)
+                        {
+                            if ( lnk == null ) {
+                                throw new Exception( "Not sure what happened here exactly..." );
                             }
+
+                            lnk.RequestNavigate += Hyperlink_RequestNavigateEvent;
                         }
 
                         return block;
@@ -200,11 +197,10 @@ namespace Chatterbox.Gui.Converters {
             // Shorten page
             firstIndex = url.LastIndexOf( "/", StringComparison.Ordinal ) + 1;
             lastIndex = url.LastIndexOf( ".", StringComparison.Ordinal );
-            if ( lastIndex - firstIndex > 10 ) {
-                string page = url.Substring( firstIndex, lastIndex - firstIndex );
-                int length = url.Length - max + 3;
-                url = url.Replace( page, "..." + page.Substring( length ) );
-            }
+            if (lastIndex - firstIndex <= 10) return url;
+            string page = url.Substring( firstIndex, lastIndex - firstIndex );
+            int length = url.Length - max + 3;
+            url = url.Replace( page, "..." + page.Substring( length ) );
 
             return url;
         }

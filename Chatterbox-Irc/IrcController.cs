@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using Meebey.SmartIrc4net;
 
-namespace Chatterbox
+namespace Chatterbox.Irc
 {
     public class IrcController
     {
@@ -35,7 +33,7 @@ namespace Chatterbox
 
                 _irc.Connect("irc.uclcommander.net", 6667);
                 _irc.Login("BotDeHeaddetect", "MahNegro");
-                _irc.RfcJoin("#uclnet");
+                _irc.RfcJoin("#bots");
 
                 _irc.Listen();
             }).Start();

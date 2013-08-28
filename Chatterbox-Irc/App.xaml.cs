@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using Elysium;
 
-namespace Chatterbox.Gui
+namespace Chatterbox.Irc
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
-
         private void StartupHandler(object sender, StartupEventArgs e)
         {
             this.Apply(Theme.Light, AccentBrushes.Purple, Brushes.White);
@@ -28,7 +23,8 @@ namespace Chatterbox.Gui
                     c.DownloadString("http://google.com");
                 }
             });
-        }
 
+            Gui.MainWindow.ChatHandler = new IrcChatHandler();
+        }
     }
 }

@@ -1,7 +1,8 @@
-﻿<Application x:Class="Chatterbox.Gui.App"
+﻿<Application x:Class="Chatterbox.Irc.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="MainWindow.xaml" Startup="StartupHandler">
+             xmlns:gui="clr-namespace:Chatterbox.Gui;assembly=Chatterbox.Gui"
+             StartupUri="pack://application:,,,/Chatterbox.Gui;component/MainWindow.xaml"  Startup="StartupHandler">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

@@ -4,13 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace Chatterbox.Gui.Utils {
+namespace Chatterbox.Gui.Utils
+{
 
-    public sealed class Emotocon {
+    public sealed class Emotocon
+    {
 
         public static List<Emotocon> Emotocons { get; private set; }
 
-        static Emotocon () {
+        static Emotocon()
+        {
             Emotocons = new List<Emotocon> {
                                                   new Emotocon ( "allthethings.png", "allthethings" ),
                                                   new Emotocon ( "android.png", "android" ),
@@ -170,34 +173,31 @@ namespace Chatterbox.Gui.Utils {
 
         }
 
-        private static void checkForConflicts () {
-            for ( int i = 0; i < Emotocons.Count;  ) {
-                Emotocon e = Emotocons[ i++ ];
-                for ( int other = i; other < Emotocons.Count; other++ ) {
-                    Emotocon e2 = Emotocons[ other ];
-                    for ( int x = 0; x < e2.Atlases.Length; x++ ) {
-                        string s2 = e2.Atlases[ x ];
-                        for ( int y = 0; y < e.Atlases.Length; y++ ) {
-                            string s = e.Atlases[ y ];
-
-                            if ( s.Equals(s2, StringComparison.InvariantCultureIgnoreCase) ) {
-                                MessageBox.Show ( "Conflict Found { " + s + ", " + s2 + " }" );
-                                throw new Exception("Conflict found");
-                            }
+        private static void checkForConflicts()
+        {
+            for (int i = 0; i < Emotocons.Count; )
+            {
+                Emotocon e = Emotocons[i++];
+                for (int other = i; other < Emotocons.Count; other++)
+                {
+                    Emotocon e2 = Emotocons[other];
+                    foreach (string s2 in e2.Atlases)
+                    {
+                        foreach (string s in e.Atlases.Where(s => s.Equals(s2, StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            MessageBox.Show("Conflict Found { " + s + ", " + s2 + " }");
+                            throw new Exception("Conflict found");
                         }
                     }
                 }
             }
         }
 
-        public static string GetImage(string byAtlas) {
-            for(int i = 0; i < Emotocons.Count; i++) {
-                Emotocon e = Emotocons[ i ];
-                for(int j = 0; j < e.Atlases.Length; j++) {
-                    if(e.Atlases[j].Equals(byAtlas, StringComparison.CurrentCultureIgnoreCase)) {
-                        return e.Url;
-                    }
-                }
+        public static string GetImage(string byAtlas)
+        {
+            foreach (Emotocon e in Emotocons.Where(e => e.Atlases.Any(t => t.Equals(byAtlas, StringComparison.CurrentCultureIgnoreCase))))
+            {
+                return e.Url;
             }
 
             return string.Empty;
@@ -206,7 +206,8 @@ namespace Chatterbox.Gui.Utils {
         public string Url { get; set; }
         public string[] Atlases { get; set; }
 
-        public Emotocon ( string url, params string[] atlases ) {
+        public Emotocon(string url, params string[] atlases)
+        {
             Url = url;
             Atlases = atlases;
         }

@@ -1,160 +1,183 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 using Chatterbox.Gui.Controls;
-using Meebey.SmartIrc4net;
 
-namespace Chatterbox.Gui {
+namespace Chatterbox.Gui
+{
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow {
-
-        private IrcClient client;
-
+    public partial class MainWindow
+    {
         public ChatWindow ActiveChatWindow { get; set; }
 
+        public static IChatHandler ChatHandler { get; set; }
 
-        public MainWindow () {
+        public MainWindow()
+        {
+            ChatWindow.MessageSent += ChatWindow_MessageSent;
             InitializeComponent();
+        }
 
+        void ChatWindow_MessageSent(object sender, ChatWindow.MessageEventArgs e)
+        {
+            if (ChatHandler == null)
+                throw new InvalidOperationException("A ChatHandler must be set");
+
+            ChatHandler.OnMessage(e.Room, e.Message);
         }
 
         #region UI Events
 
-        private void Window_Loaded ( object sender, RoutedEventArgs e ) {
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (ChatHandler == null)
+                throw new InvalidOperationException("A ChatHandler must be set");
 
-
-            client = IrcController.Client;
-            client.OnConnecting += client_OnConnecting;
-            client.OnConnected += client_OnConnected;
-            client.OnConnectionError += client_OnConnectionError;
-            client.OnChannelMessage += client_OnChannelMessage;
-            client.OnError += client_OnError;
-            client.OnErrorMessage += client_OnErrorMessage;
-            client.OnChannelNotice += client_OnChannelNotice;
-            client.OnChannelAction += client_OnChannelAction;
-            client.OnNames +=  client_OnNames ;
-
-#if !DESIGN
-            IrcController.Connect();
-#endif
-
-
+            ChatHandler.OnLoad(this);
         }
-
-
 
 
         #endregion
 
-
-        private bool Reinvoke<T> ( Action<object, T> method, object sender, T e ) {
-            try {
-                Boolean boold = (Boolean) sender;
-
-                if ( !boold ) {
-                    sender = true;
-                }
-            }
-            catch ( InvalidCastException ) {
-                sender = false;
-                Dispatcher.BeginInvoke( method, sender, e );
-            }
-
-            return (bool) sender;
-        }
-
-        private void tbControl_SelectionChanged ( object sender, SelectionChangedEventArgs e ) {
+        private void tbControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
             e.Handled = true;
 
-            if ( !IsLoaded )
+            if (!IsLoaded)
                 return;
 
-            if ( e.OriginalSource is TabControl ) {
-                TabControl sawse = e.Source as TabControl;
-                if ( sawse != null ) {
-                    TabItem itm = sawse.SelectedItem as TabItem;
+            if (!(e.OriginalSource is TabControl)) return;
+            TabControl sawse = e.Source as TabControl;
+            if (sawse == null) return;
+            TabItem itm = sawse.SelectedItem as TabItem;
 
-                    if ( itm == null )
+            if (itm == null)
+                return;
+
+            ActiveChatWindow = itm.Content as ChatWindow;
+        }
+
+
+
+        private static T FindVisualChildByName<T>(DependencyObject parent, string name) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                string controlName = child.GetValue(NameProperty) as string;
+                if (controlName == name && child is T)
+                {
+                    return child as T;
+                }
+                T result = FindVisualChildByName<T>(child, name);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+
+        private static T FindVisualChildByType<T>(DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T)
+                {
+                    return child as T;
+                }
+                T result = FindVisualChildByType<T>(child);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+
+        public void AddItem(string message, string user, string room)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+
+                for (int i = 1; i < tbControl.Items.Count; i++)
+                {
+                    var tb = tbControl.ItemContainerGenerator.ContainerFromIndex(i) as TabItem;
+
+                    if (tb == null)
+                        continue;
+
+                    ChatWindow window = tb.Content as ChatWindow;
+
+                    if (window == null)
+                        continue;
+
+                    if (window.Room == room)
+                    {
+                        window.AddItem(message, user);
+                    }
+                }
+
+            }));
+        }
+
+        public void AddUsers(string[] users, string room)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                for (int i = 1; i < tbControl.Items.Count; i++)
+                {
+                    var tb = tbControl.ItemContainerGenerator.ContainerFromIndex(i) as TabItem;
+
+                    if (tb == null)
+                        continue;
+
+                    ChatWindow window = tb.Content as ChatWindow;
+
+                    if (window == null)
+                        continue;
+
+                    if (window.Room == room)
+                    {
+                        window.AddUser(users);
+                    }
+                }
+            }));
+        }
+
+        public void CreateRoom(string room)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                for (int i = 1; i < tbControl.Items.Count; i++)
+                {
+                    var tb = tbControl.ItemContainerGenerator.ContainerFromIndex(i) as TabItem;
+
+                    if (tb == null)
+                        continue;
+
+                    ChatWindow window = tb.Content as ChatWindow;
+
+                    if (window == null)
+                        continue;
+
+                    if (window.Room == room)
+                    {
                         return;
-
-                    ActiveChatWindow = itm.Content as ChatWindow;
+                    }
                 }
-            }
 
-
+                var tab = new TabItem { Content = new ChatWindow(room), Header = room };
+                tbControl.Items.Add(tab);
+            }));
         }
 
-
-
-        private static T FindVisualChildByName<T> ( DependencyObject parent, string name ) where T : DependencyObject {
-            for ( int i = 0; i < VisualTreeHelper.GetChildrenCount( parent ); i++ ) {
-                var child = VisualTreeHelper.GetChild( parent, i );
-                string controlName = child.GetValue( NameProperty ) as string;
-                if ( controlName == name && child is T ) {
-                    return child as T;
-                }
-                T result = FindVisualChildByName<T>( child, name );
-                if ( result != null )
-                    return result;
-            }
-            return null;
-        }
-
-        private static T FindVisualChildByType<T> ( DependencyObject parent ) where T : DependencyObject {
-            for ( int i = 0; i < VisualTreeHelper.GetChildrenCount( parent ); i++ ) {
-                var child = VisualTreeHelper.GetChild( parent, i );
-                if ( child is T ) {
-                    return child as T;
-                }
-                T result = FindVisualChildByType<T>( child );
-                if ( result != null )
-                    return result;
-            }
-            return null;
-        }
-
-        internal void AddItem ( string message, string nick, string channel ) {
-            for ( int i = 1; i < tbControl.Items.Count; i++ ) {
-                var tb = tbControl.ItemContainerGenerator.ContainerFromIndex( i ) as TabItem;
-
-                if ( tb == null )
-                    continue;
-
-                ChatWindow window = tb.Content as ChatWindow;
-
-                if ( window == null )
-                    continue;
-
-                if ( window.Channel == channel ) {
-                    window.AddItem( message, nick );
-                }
-            }
-        }
-
-        private void AddUsers ( string[] users, string channel ) {
-            for ( int i = 1; i < tbControl.Items.Count; i++ ) {
-                var tb = tbControl.ItemContainerGenerator.ContainerFromIndex( i ) as TabItem;
-
-                if ( tb == null )
-                    continue;
-
-                ChatWindow window = tb.Content as ChatWindow;
-
-                if ( window == null )
-                    continue;
-
-                if ( window.Channel == channel ) {
-                    window.AddUser( users );
-                }
-            }
+        private void btnAddRoom_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO: Create window that asks for new room
+            //TODO: use chat handler to check to see if can join
+            //TODO: if can join, join; else error
         }
 
     }

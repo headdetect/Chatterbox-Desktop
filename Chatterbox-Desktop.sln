@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatterbox", "Chatterbox-Desktop\Chatterbox.csproj", "{127D3FF0-7239-45DC-A248-59C556095315}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatterbox.Irc", "Chatterbox-Irc\Chatterbox.Irc.csproj", "{82B02D3B-6C0F-40CF-BF2B-EEBCFCD19DE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatterbox.Irc", "Chatterbox.Irc\Chatterbox.Irc.csproj", "{82B02D3B-6C0F-40CF-BF2B-EEBCFCD19DE8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatterbox.Skype", "Chatterbox.Skype\Chatterbox.Skype.csproj", "{BC76FE93-CAB1-485F-9775-B0EF3E83C463}"
 EndProject

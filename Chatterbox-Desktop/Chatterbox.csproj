@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{127D3FF0-7239-45DC-A248-59C556095315}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chatterbox</RootNamespace>
+    <AssemblyName>Chatterbox</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Design|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Design\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;DESIGN</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Chatterbox.Gui.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Elysium">
+      <HintPath>libs\Elysium.dll</HintPath>
+    </Reference>
+    <Reference Include="Elysium.Design.11.0, Version=1.5.101.0, Culture=neutral, PublicKeyToken=afa220db249e5b15, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>libs\Elysium.Design.11.0.dll</HintPath>
+    </Reference>
+    <Reference Include="Elysium.Notifications">
+      <HintPath>libs\Elysium.Notifications.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Drawing">
+      <HintPath>libs\Microsoft.Expression.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Windows.Shell">
+      <HintPath>libs\Microsoft.Windows.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Gui\ChatItem.cs" />
+    <Compile Include="Gui\Controls\ChatWindow.xaml.cs">
+      <DependentUpon>ChatWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Gui\IChatHandler.cs" />
+    <Compile Include="Gui\Utils\Emotoconer.cs" />
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Gui\Controls\AsyncImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Gui\Controls\ChatListBoxItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Gui\Controls\ChatWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Gui\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Gui\Controls\AsyncImage.xaml.cs">
+      <DependentUpon>AsyncImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Gui\Controls\ChatListBoxItem.xaml.cs">
+      <DependentUpon>ChatListBoxItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Gui\Converters\StringToXAMLConverter.cs" />
+    <Compile Include="Gui\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MessageBlock.cs" />
+    <Compile Include="Plugins\ChatPlugin.cs" />
+    <Compile Include="Plugins\PluginLoader.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Gui\Emotes\allthethings.png" />
+    <Resource Include="Gui\Emotes\android.png" />
+    <Resource Include="Gui\Emotes\angry.png" />
+    <Resource Include="Gui\Emotes\areyoukiddingme.png" />
+    <Resource Include="Gui\Emotes\ashton.png" />
+    <Resource Include="Gui\Emotes\awthanks.png" />
+    <Resource Include="Gui\Emotes\awyea.png" />
+    <Resource Include="Gui\Emotes\badass.png" />
+    <Resource Include="Gui\Emotes\badpokerface.png" />
+    <Resource Include="Gui\Emotes\basket.png" />
+    <Resource Include="Gui\Emotes\beer.png" />
+    <Resource Include="Gui\Emotes\bigsmile.png" />
+    <Resource Include="Gui\Emotes\boom.gif" />
+    <Resource Include="Gui\Emotes\bumble.png" />
+    <Resource Include="Gui\Emotes\bunny.png" />
+    <Resource Include="Gui\Emotes\cadbury.png" />
+    <Resource Include="Gui\Emotes\cake.png" />
+    <Resource Include="Gui\Emotes\candycorn.png" />
+    <Resource Include="Gui\Emotes\caruso.png" />
+    <Resource Include="Gui\Emotes\ceilingcat.png" />
+    <Resource Include="Gui\Emotes\cerealguy.png" />
+    <Resource Include="Gui\Emotes\cerealspit.png" />
+    <Resource Include="Gui\Emotes\challengeaccepted.png" />
+    <Resource Include="Gui\Emotes\chewy.png" />
+    <Resource Include="Gui\Emotes\chocobunny.png" />
+    <Resource Include="Gui\Emotes\chompy.gif" />
+    <Resource Include="Gui\Emotes\chris.png" />
+    <Resource Include="Gui\Emotes\chucknorris.png" />
+    <Resource Include="Gui\Emotes\coffee.png" />
+    <Resource Include="Gui\Emotes\content.png" />
+    <Resource Include="Gui\Emotes\cool.png" />
+    <Resource Include="Gui\Emotes\cornelius.png" />
+    <Resource Include="Gui\Emotes\cry.png" />
+    <Resource Include="Gui\Emotes\dance.gif" />
+    <Resource Include="Gui\Emotes\dealwithit.gif" />
+    <Resource Include="Gui\Emotes\derp.png" />
+    <Resource Include="Gui\Emotes\disapproval.png" />
+    <Resource Include="Gui\Emotes\dosequis.png" />
+    <Resource Include="Gui\Emotes\drevil.png" />
+    <Resource Include="Gui\Emotes\ducreux.png" />
+    <Resource Include="Gui\Emotes\dumb.png" />
+    <Resource Include="Gui\Emotes\dumbbitch.png" />
+    <Resource Include="Gui\Emotes\embarrassed.png" />
+    <Resource Include="Gui\Emotes\facepalm.png" />
+    <Resource Include="Gui\Emotes\fap.png" />
+    <Resource Include="Gui\Emotes\farnsworth.png" />
+    <Resource Include="Gui\Emotes\firstworldproblem.png" />
+    <Resource Include="Gui\Emotes\footinmouth.png" />
+    <Resource Include="Gui\Emotes\foreveralone.png" />
+    <Resource Include="Gui\Emotes\freddie.png" />
+    <Resource Include="Gui\Emotes\frown.png" />
+    <Resource Include="Gui\Emotes\fry.png" />
+    <Resource Include="Gui\Emotes\fuckyeah.png" />
+    <Resource Include="Gui\Emotes\fwp.png" />
+    <Resource Include="Gui\Emotes\gangnamstyle.gif" />
+    <Resource Include="Gui\Emotes\garret.png" />
+    <Resource Include="Gui\Emotes\gasp.png" />
+    <Resource Include="Gui\Emotes\gates.png" />
+    <Resource Include="Gui\Emotes\gaytroll.gif" />
+    <Resource Include="Gui\Emotes\ghost.png" />
+    <Resource Include="Gui\Emotes\greenbeer.png" />
+    <Resource Include="Gui\Emotes\gtfo.png" />
+    <Resource Include="Gui\Emotes\happytear.gif" />
+    <Resource Include="Gui\Emotes\haveaseat.png" />
+    <Resource Include="Gui\Emotes\heart.png" />
+    <Resource Include="Gui\Emotes\hipster.png" />
+    <Resource Include="Gui\Emotes\ilied.png" />
+    <Resource Include="Gui\Emotes\indeed.png" />
+    <Resource Include="Gui\Emotes\innocent.png" />
+    <Resource Include="Gui\Emotes\iseewhatyoudidthere.png" />
+    <Resource Include="Gui\Emotes\itsatrap.png" />
+    <Resource Include="Gui\Emotes\jackie.png" />
+    <Resource Include="Gui\Emotes\jobs.png" />
+    <Resource Include="Gui\Emotes\kennypowers.png" />
+    <Resource Include="Gui\Emotes\kiss.png" />
+    <Resource Include="Gui\Emotes\krang.gif" />
+    <Resource Include="Gui\Emotes\kwanzaa.png" />
+    <Resource Include="Gui\Emotes\lincoln.png" />
+    <Resource Include="Gui\Emotes\lol.png" />
+    <Resource Include="Gui\Emotes\lolwut.png" />
+    <Resource Include="Gui\Emotes\megusta.png" />
+    <Resource Include="Gui\Emotes\menorah.png" />
+    <Resource Include="Gui\Emotes\mike.png" />
+    <Resource Include="Gui\Emotes\moneymouth.png" />
+    <Resource Include="Gui\Emotes\ninja.png" />
+    <Resource Include="Gui\Emotes\notbad.png" />
+    <Resource Include="Gui\Emotes\nothingtodohere.png" />
+    <Resource Include="Gui\Emotes\notsureif.png" />
+    <Resource Include="Gui\Emotes\notsureifgusta.png" />
+    <Resource Include="Gui\Emotes\obama.png" />
+    <Resource Include="Gui\Emotes\ohcrap.png" />
+    <Resource Include="Gui\Emotes\ohgodwhy.jpeg" />
+    <Resource Include="Gui\Emotes\okay.png" />
+    <Resource Include="Gui\Emotes\omg.png" />
+    <Resource Include="Gui\Emotes\oops.png" />
+    <Resource Include="Gui\Emotes\orly.png" />
+    <Resource Include="Gui\Emotes\pbr.png" />
+    <Resource Include="Gui\Emotes\pete.png" />
+    <Resource Include="Gui\Emotes\philosoraptor.png" />
+    <Resource Include="Gui\Emotes\pingpong.png" />
+    <Resource Include="Gui\Emotes\pirate.gif" />
+    <Resource Include="Gui\Emotes\pokerface.png" />
+    <Resource Include="Gui\Emotes\poo.png" />
+    <Resource Include="Gui\Emotes\present.png" />
+    <Resource Include="Gui\Emotes\pumpkin.png" />
+    <Resource Include="Gui\Emotes\rageguy.png" />
+    <Resource Include="Gui\Emotes\rebeccablack.png" />
+    <Resource Include="Gui\Emotes\reddit.png" />
+    <Resource Include="Gui\Emotes\romney.png" />
+    <Resource Include="Gui\Emotes\rudolph.png" />
+    <Resource Include="Gui\Emotes\sadpanda.png" />
+    <Resource Include="Gui\Emotes\sadtroll.png" />
+    <Resource Include="Gui\Emotes\samuel.png" />
+    <Resource Include="Gui\Emotes\santa.png" />
+    <Resource Include="Gui\Emotes\scumbag.png" />
+    <Resource Include="Gui\Emotes\sealed.png" />
+    <Resource Include="Gui\Emotes\seomoz.png" />
+    <Resource Include="Gui\Emotes\shamrock.png" />
+    <Resource Include="Gui\Emotes\shrug.png" />
+    <Resource Include="Gui\Emotes\skyrim.png" />
+    <Resource Include="Gui\Emotes\slant.png" />
+    <Resource Include="Gui\Emotes\smile.png" />
+    <Resource Include="Gui\Emotes\stare.png" />
+    <Resource Include="Gui\Emotes\straightface.png" />
+    <Resource Include="Gui\Emotes\success.png" />
+    <Resource Include="Gui\Emotes\sweetjesus.png" />
+    <Resource Include="Gui\Emotes\tableflip.png" />
+    <Resource Include="Gui\Emotes\taft.png" />
+    <Resource Include="Gui\Emotes\tea.png" />
+    <Resource Include="Gui\Emotes\thumbs_down.png" />
+    <Resource Include="Gui\Emotes\thumbs_up.png" />
+    <Resource Include="Gui\Emotes\tongue.png" />
+    <Resource Include="Gui\Emotes\tree.png" />
+    <Resource Include="Gui\Emotes\troll.png" />
+    <Resource Include="Gui\Emotes\truestory.png" />
+    <Resource Include="Gui\Emotes\trump.png" />
+    <Resource Include="Gui\Emotes\turkey.png" />
+    <Resource Include="Gui\Emotes\twss.png" />
+    <Resource Include="Gui\Emotes\washington.png" />
+    <Resource Include="Gui\Emotes\wat.png" />
+    <Resource Include="Gui\Emotes\wink.png" />
+    <Resource Include="Gui\Emotes\winktongue.gif" />
+    <Resource Include="Gui\Emotes\wtf.png" />
+    <Resource Include="Gui\Emotes\yey.png" />
+    <Resource Include="Gui\Emotes\yodawg.png" />
+    <Resource Include="Gui\Emotes\yuno.png" />
+    <Resource Include="Gui\Emotes\zoidberg.png" />
+    <Resource Include="Gui\Emotes\zzz.gif" />
+    <Content Include="Libs\Elysium.Design.11.0.dll" />
+    <Content Include="Libs\Elysium.dll" />
+    <Content Include="Libs\Elysium.Notifications.dll" />
+    <Resource Include="Libs\ElysiumLicense.txt" />
+    <Content Include="Libs\Microsoft.Expression.Drawing.dll" />
+    <Content Include="Libs\Microsoft.Windows.Shell.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

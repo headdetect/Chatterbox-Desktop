@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatterbox.Gui", "Chatterbox-Desktop\Chatterbox.Gui.csproj", "{127D3FF0-7239-45DC-A248-59C556095315}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meebey.SmartIrc4net", "LibIRC\Meebey.SmartIrc4net.csproj", "{8E981981-5F3C-4358-9D9B-4407E6DAEE80}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatterbox", "Chatterbox-Desktop\Chatterbox.csproj", "{127D3FF0-7239-45DC-A248-59C556095315}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatterbox.Irc", "Chatterbox-Irc\Chatterbox.Irc.csproj", "{82B02D3B-6C0F-40CF-BF2B-EEBCFCD19DE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatterbox.Skype", "Chatterbox.Skype\Chatterbox.Skype.csproj", "{BC76FE93-CAB1-485F-9775-B0EF3E83C463}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,17 +27,6 @@ Global
 		{127D3FF0-7239-45DC-A248-59C556095315}.Release|Mixed Platforms.Build.0 = Release|x86
 		{127D3FF0-7239-45DC-A248-59C556095315}.Release|x86.ActiveCfg = Release|x86
 		{127D3FF0-7239-45DC-A248-59C556095315}.Release|x86.Build.0 = Release|x86
-		{8E981981-5F3C-4358-9D9B-4407E6DAEE80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E981981-5F3C-4358-9D9B-4407E6DAEE80}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E981981-5F3C-4358-9D9B-4407E6DAEE80}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{8E981981-5F3C-4358-9D9B-4407E6DAEE80}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{8E981981-5F3C-4358-9D9B-4407E6DAEE80}.Debug|x86.ActiveCfg = Debug|x86
-		{8E981981-5F3C-4358-9D9B-4407E6DAEE80}.Debug|x86.Build.0 = Debug|x86
-		{8E981981-5F3C-4358-9D9B-4407E6DAEE80}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E981981-5F3C-4358-9D9B-4407E6DAEE80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8E981981-5F3C-4358-9D9B-4407E6DAEE80}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{8E981981-5F3C-4358-9D9B-4407E6DAEE80}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{8E981981-5F3C-4358-9D9B-4407E6DAEE80}.Release|x86.ActiveCfg = Release|Any CPU
 		{82B02D3B-6C0F-40CF-BF2B-EEBCFCD19DE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{82B02D3B-6C0F-40CF-BF2B-EEBCFCD19DE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82B02D3B-6C0F-40CF-BF2B-EEBCFCD19DE8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -49,6 +38,16 @@ Global
 		{82B02D3B-6C0F-40CF-BF2B-EEBCFCD19DE8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{82B02D3B-6C0F-40CF-BF2B-EEBCFCD19DE8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{82B02D3B-6C0F-40CF-BF2B-EEBCFCD19DE8}.Release|x86.ActiveCfg = Release|Any CPU
+		{BC76FE93-CAB1-485F-9775-B0EF3E83C463}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC76FE93-CAB1-485F-9775-B0EF3E83C463}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC76FE93-CAB1-485F-9775-B0EF3E83C463}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BC76FE93-CAB1-485F-9775-B0EF3E83C463}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BC76FE93-CAB1-485F-9775-B0EF3E83C463}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BC76FE93-CAB1-485F-9775-B0EF3E83C463}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC76FE93-CAB1-485F-9775-B0EF3E83C463}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC76FE93-CAB1-485F-9775-B0EF3E83C463}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BC76FE93-CAB1-485F-9775-B0EF3E83C463}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BC76FE93-CAB1-485F-9775-B0EF3E83C463}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Linq;
 using Chatterbox.Gui;
+using Chatterbox.Gui.Plugins;
 using SKYPE4COMLib;
 using System.Collections.Generic;
 
 namespace Chatterbox.Skype
 {
-    public class SkypeChatHandler : IChatHandler
+    public class SkypeChatHandler : ChatPlugin
     {
         internal SKYPE4COMLib.Skype _skype;
         private WindowHolder _wHolder;
-        public void OnLoad(MainWindow window)
+        public override void OnLoad(MainWindow window)
         {
             _wHolder = new WindowHolder(window);
             _skype = new SKYPE4COMLib.Skype();
@@ -36,7 +37,7 @@ namespace Chatterbox.Skype
             }
         }
 
-        public bool OnJoinRoom(string room)
+        public override bool OnJoinRoom(string room)
         {
             //var ContactWindow = new SelectContactWindow(this);
             //ContactWindow.Show();
@@ -44,15 +45,14 @@ namespace Chatterbox.Skype
             return false;
         }
 
-        public bool OnMessage(string room, string message)
+        public override MessageBlock OnMessage(string room, string message)
         {
             if (!_wHolder.DoesRoomExist(room))
-                return false;
+                return null;
 
             Chat chat = _wHolder.GetChatForRoom(room);
             chat.SendMessage(message);
-            _wHolder.GetMainWindow().AddItem(message, _skype.CurrentUser.DisplayName, room);
-            return true;
+            return message;
         }
     }
 

@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Chatterbox.Gui;
+using Chatterbox.Gui.Plugins;
 using Chatterbox.Irc;
 using Meebey.SmartIrc4net;
 
 namespace Chatterbox
 {
-    public class IrcChatHandler : IChatHandler
+    public class IrcChatHandler : ChatPlugin
     {
         private IrcClient _client;
         private MainWindow _window;
 
-        public void OnLoad(MainWindow window)
+        public override void OnLoad(MainWindow window)
         {
             _window = window;
 
@@ -33,23 +34,19 @@ namespace Chatterbox
             IrcController.Connect();
         }
 
-        public bool OnJoinRoom(string room)
+        public override bool OnJoinRoom(string room)
         {
             return false;
         }
 
-        public bool OnMessage(string room, string message)
+        public override MessageBlock OnMessage(string room, string message)
         {
             const bool canSend = true;
 
             //TODO: Make sure can send;
             _client.SendMessage(SendType.Message, room, message);
 
-            if (canSend)
-                _window.AddItem(message, _client.Nickname, room);
-
-
-                return canSend;
+            return message;
         }
 
         void client_OnNames(object sender, NamesEventArgs e)

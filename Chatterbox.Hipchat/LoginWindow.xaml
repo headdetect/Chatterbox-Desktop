@@ -1,0 +1,12 @@
+﻿<metro:Window x:Class="Chatterbox.Hipchat.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:metro="clr-namespace:Elysium.Controls;assembly=Elysium"
+        Title="LoginWindow" Height="184" Width="348">
+    <Grid Margin="0,0,2,0">
+        <TextBox x:Name="txtUsername" Height="41" Margin="10,10,10,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" FontSize="16"/>
+        <PasswordBox x:Name="txtPassword" Height="41" Margin="10,56,10,0"  VerticalAlignment="Top" FontSize="16" KeyDown="txtPassword_KeyDown"/>
+        <Button x:Name="btnLogin" Content="Login" HorizontalAlignment="Right" Margin="0,0,10,10" Width="86" Height="35" VerticalAlignment="Bottom" Click="btnLogin_Click"/>
+        <TextBlock x:Name="lblMessage" HorizontalAlignment="Left" Margin="10,118,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFA21717"/>
+    </Grid>
+</metro:Window>

@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="454" d:DesignWidth="818">
     <UserControl.Resources>
-        <converters:StringToXamlConverter x:Key="stringToXaml" />
+        <converters:StringToXamlConverter x:Key="StringToXaml" />
 
         <!-- is actually used -->
         <Style TargetType="{x:Type Hyperlink}">
@@ -43,7 +43,7 @@
                                     <Label Content="{Binding Username}" FontWeight="Bold"  Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}, Path=Foreground}" Name="lblUsername" FontFamily="Segoe UI" HorizontalAlignment="Right" />
                                 </Viewbox>
                             </DockPanel>
-                            <ContentControl Content="{Binding Message, Converter={StaticResource stringToXaml}, Mode=OneTime}" Grid.Column="1" MinHeight="40" HorizontalAlignment="Left" />
+                            <ContentControl Content="{Binding Message, Converter={StaticResource StringToXaml}, Mode=OneTime}" Grid.Column="1" MinHeight="40" HorizontalAlignment="Left" />
                             <Label Content="{Binding Time}" ContentStringFormat="{}{0:hh:mm tt}" Grid.Column="2" Margin="0,7,9,0" Foreground="#FF888888" HorizontalAlignment="Right" Width="75" Height="30" VerticalAlignment="Top" FlowDirection="LeftToRight" HorizontalContentAlignment="Right" />
                         </Grid>
                     </StackPanel>

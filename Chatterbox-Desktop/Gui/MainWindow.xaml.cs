@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Chatterbox.Gui.Controls;
-using Chatterbox.Gui.Plugins;
+using Chatterbox.Plugins;
 
 namespace Chatterbox.Gui
 {
@@ -172,11 +172,9 @@ namespace Chatterbox.Gui
             }));
         }
 
-        private void btnAddRoom_Click(object sender, RoutedEventArgs e)
+        public void SetLobbyRoom(UserControl control)
         {
-            //TODO: Create window that asks for new room
-            //TODO: use chat handler to check to see if can join
-            //TODO: if can join, join; else error
+            tbLobby.Content = control;
         }
 
     }

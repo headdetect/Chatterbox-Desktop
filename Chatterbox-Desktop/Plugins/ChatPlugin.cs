@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Chatterbox.Gui;
 
-namespace Chatterbox.Gui.Plugins
+namespace Chatterbox.Plugins
 {
     public abstract class ChatPlugin
     {

@@ -60,6 +60,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AurelienRibon.Ui.SyntaxHighlightBox, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>libs\AurelienRibon.Ui.SyntaxHighlightBox.dll</HintPath>
+    </Reference>
     <Reference Include="Elysium">
       <HintPath>libs\Elysium.dll</HintPath>
     </Reference>
@@ -129,7 +133,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MessageBlock.cs" />
+    <Compile Include="Gui\MessageBlock.cs" />
     <Compile Include="Plugins\ChatPlugin.cs" />
     <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -304,6 +308,7 @@
     <Resource Include="Gui\Emotes\yuno.png" />
     <Resource Include="Gui\Emotes\zoidberg.png" />
     <Resource Include="Gui\Emotes\zzz.gif" />
+    <Content Include="Libs\AurelienRibon.Ui.SyntaxHighlightBox.dll" />
     <Content Include="Libs\Elysium.Design.11.0.dll" />
     <Content Include="Libs\Elysium.dll" />
     <Content Include="Libs\Elysium.Notifications.dll" />

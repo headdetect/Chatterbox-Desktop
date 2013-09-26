@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
-using Chatterbox.Gui.Plugins;
+using Chatterbox.Plugins;
 using Elysium;
 
 namespace Chatterbox

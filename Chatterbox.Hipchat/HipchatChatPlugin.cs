@@ -9,6 +9,8 @@ using System.Web.UI.WebControls;
 using System.Xml;
 using agsXMPP;
 using agsXMPP.protocol.client;
+using agsXMPP.protocol.iq.browse;
+using agsXMPP.protocol.iq.disco;
 using agsXMPP.protocol.x.muc;
 using agsXMPP.Xml.Dom;
 using Chatterbox.Plugins;
@@ -118,12 +120,29 @@ namespace Chatterbox.Hipchat
             HipchatClient.AutoResolveConnectServer = false;
             HipchatClient.OnLogin += HipchatClient_OnLogin;
 
-            MucManager  = new MucManager(HipchatClient);
+            MucManager = new MucManager(HipchatClient);
 
             HipchatClient.OnPresence += HipchatClient_OnPresence;
             HipchatClient.OnRosterItem += HipchatClient_OnRosterItem;
-
+            HipchatClient.OnIq += HipchatClient_OnIq;
+            HipchatClient.OnBinded += HipchatClient_OnBinded;
+            HipchatClient.OnReadXml += HipchatClient_OnReadXml;
             Window.SetLobbyRoom(Lobby = new LobbyControl());
+        }
+
+        void HipchatClient_OnReadXml(object sender, string xml)
+        {
+            Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add("XML: " + xml)));
+        }
+
+        void HipchatClient_OnBinded(object sender)
+        {
+            //Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add("BIND: " + sender)));
+        }
+
+        void HipchatClient_OnIq(object sender, IQ iq)
+        {
+            Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add("IQ: " + iq)));
         }
 
         void HipchatClient_OnRosterItem(object sender, agsXMPP.protocol.iq.roster.RosterItem item)
@@ -133,15 +152,18 @@ namespace Chatterbox.Hipchat
 
         void HipchatClient_OnLogin(object sender)
         {
-            MucManager.JoinRoom(new Jid("room@conf.hipchat.com"), Name);
+            IQ iq = new IQ(IqType.get, SelfJid, new Jid("conf.hipchat.com")) { Query = new DiscoItems() };
+            HipchatClient.Send(iq);
+
+            //MucManager.JoinRoom(new Jid("room@conf.hipchat.com"), Name);
             //HipchatClient.Send(new Message(new Jid("room@conf.hipchat.com"), MessageType.groupchat, "This is a test message. Pls ignore k?"));
-            
-            
+
+
         }
 
         void HipchatClient_OnPresence(object sender, Presence pres)
         {
-            Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add("PRES " + pres.MucUser.Item)));
+            Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add("PRES " + pres)));
         }
 
 

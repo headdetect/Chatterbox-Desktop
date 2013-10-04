@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Chatterbox.Hipchat.Model;
 
 namespace Chatterbox.Hipchat
 {
@@ -19,6 +20,8 @@ namespace Chatterbox.Hipchat
     /// </summary>
     public partial class LobbyControl
     {
+        public event EventHandler<RoomJoinEventArgs> OnRoomJoin;
+
         public LobbyControl()
         {
             InitializeComponent();
@@ -28,6 +31,20 @@ namespace Chatterbox.Hipchat
         {
             if (lstRooms.SelectedIndex == -1) return;
 
+            HipchatRoom room = lstRooms.Items[lstRooms.SelectedIndex] as HipchatRoom;
+
+            if (OnRoomJoin != null && room != null)
+                OnRoomJoin(this, new RoomJoinEventArgs(room));
+        }
+
+        public class RoomJoinEventArgs : EventArgs
+        {
+            public HipchatRoom HipchatRoom { get; set; }
+
+            public RoomJoinEventArgs(HipchatRoom room)
+            {
+                HipchatRoom = room;
+            }
         }
     }
 }

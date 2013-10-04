@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Chatterbox.Hipchat.Model
 {
-    internal class HipchatRoom
+    public class HipchatRoom
     {
         public string Name { get; set; }
         public string RoomID { get; set; }

@@ -29,9 +29,6 @@ namespace Chatterbox.Gui.Converters {
         /// </summary>
         public const string ParseKey = "§";
 
-        static StringToXamlConverter () {
-            Assembly.Load( "Chatterbox.Gui" );
-        }
 
         /// <summary>
         /// Converts a string containing valid XAML into WPF objects.

@@ -3,13 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:metro="http://schemas.codeplex.com/elysium" 
+             xmlns:src="clr-namespace:Chatterbox;assembly=Chatterbox"
+             xmlns:gui="clr-namespace:Chatterbox.Gui"
              xmlns:converters="clr-namespace:Chatterbox.Gui.Converters"
-             xmlns:metro="http://schemas.codeplex.com/elysium" xmlns:src="clr-namespace:Chatterbox;assembly=Chatterbox"
              Name="chatWindow"
              mc:Ignorable="d" 
              d:DesignHeight="454" d:DesignWidth="818">
     <UserControl.Resources>
-        <converters:StringToXamlConverter x:Key="StringToXaml" />
+        <converters:StringToXamlConverter x:Key="stringXmlConverter" />
 
         <!-- is actually used -->
         <Style TargetType="{x:Type Hyperlink}">
@@ -23,11 +25,11 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <TextBox Margin="12,0,298,12" Name="txtMessage" Height="60" VerticalAlignment="Bottom" FontFamily="Calibri" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" VerticalContentAlignment="Top" KeyDown="txtMessage_KeyDown"/>
+        <TextBox Margin="12,0,298,12" Name="txtMessage" Height="60" VerticalAlignment="Bottom" FontFamily="Calibri" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" VerticalContentAlignment="Top" KeyDown="txtMessage_KeyDown" BorderThickness="1"/>
         <Button Content="Send" Height="60" HorizontalAlignment="Right" Margin="0,0,218,12" Name="btnSend" VerticalAlignment="Bottom" Width="74" Click="btnSend_Click" />
         <ListBox Margin="12,12,218,78" Name="lstChat" ItemsSource="{Binding}" BorderBrush="#F777" BorderThickness="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="src:ChatItem">
+                <DataTemplate DataType="gui:ChatItem">
                     <StackPanel>
                         <StackPanel.Width>
                             <Binding Path="ActualWidth" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type ScrollContentPresenter}}" />
@@ -43,7 +45,7 @@
                                     <Label Content="{Binding Username}" FontWeight="Bold"  Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}, Path=Foreground}" Name="lblUsername" FontFamily="Segoe UI" HorizontalAlignment="Right" />
                                 </Viewbox>
                             </DockPanel>
-                            <ContentControl Content="{Binding Message, Converter={StaticResource StringToXaml}, Mode=OneTime}" Grid.Column="1" MinHeight="40" HorizontalAlignment="Left" />
+                            <ContentControl Content="{Binding Message, Converter={StaticResource stringXmlConverter}, Mode=OneTime}" Grid.Column="1" MinHeight="40" HorizontalAlignment="Left" />
                             <Label Content="{Binding Time}" ContentStringFormat="{}{0:hh:mm tt}" Grid.Column="2" Margin="0,7,9,0" Foreground="#FF888888" HorizontalAlignment="Right" Width="75" Height="30" VerticalAlignment="Top" FlowDirection="LeftToRight" HorizontalContentAlignment="Right" />
                         </Grid>
                     </StackPanel>

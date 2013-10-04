@@ -9,11 +9,14 @@ using System.Web.UI.WebControls;
 using System.Xml;
 using agsXMPP;
 using agsXMPP.protocol.client;
+using agsXMPP.protocol.component;
 using agsXMPP.protocol.iq.browse;
 using agsXMPP.protocol.iq.disco;
 using agsXMPP.protocol.x.muc;
 using agsXMPP.Xml.Dom;
+using Chatterbox.Hipchat.Model;
 using Chatterbox.Plugins;
+using Message = agsXMPP.protocol.client.Message;
 
 namespace Chatterbox.Hipchat
 {
@@ -28,6 +31,8 @@ namespace Chatterbox.Hipchat
         internal static MucManager MucManager;
 
         internal static LobbyControl Lobby;
+
+        internal static List<HipchatRoom> Rooms = new List<HipchatRoom>();
 
         #region Hipchat Vars
 
@@ -115,57 +120,60 @@ namespace Chatterbox.Hipchat
 
             HipchatClient = new XmppClientConnection("chat.hipchat.com");
             HipchatClient.Open(Nickname, loginWindow.Password);
-            HipchatClient.Status = "DID IT WORK :D?";
+            HipchatClient.Status = "Chatterbox";
             HipchatClient.Show = ShowType.chat;
             HipchatClient.AutoResolveConnectServer = false;
             HipchatClient.OnLogin += HipchatClient_OnLogin;
 
-            MucManager = new MucManager(HipchatClient);
+            MucManager = new MucManager(HipchatClient); 
 
-            HipchatClient.OnPresence += HipchatClient_OnPresence;
+            HipchatClient.OnRosterStart += sender => Users.Clear();
             HipchatClient.OnRosterItem += HipchatClient_OnRosterItem;
-            HipchatClient.OnIq += HipchatClient_OnIq;
-            HipchatClient.OnBinded += HipchatClient_OnBinded;
-            HipchatClient.OnReadXml += HipchatClient_OnReadXml;
-            Window.SetLobbyRoom(Lobby = new LobbyControl());
+            HipchatClient.OnMessage += HipchatClient_OnMessage;
+
+            Lobby = new LobbyControl();
+            Lobby.OnRoomJoin += Lobby_OnRoomJoin;
+
+            Window.SetLobbyRoom(Lobby);
+
         }
 
-        void HipchatClient_OnReadXml(object sender, string xml)
+        void HipchatClient_OnMessage(object sender, Message msg)
         {
-            Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add("XML: " + xml)));
+            HipchatRoom room = Rooms.First(rm => rm.RoomID.StartsWith(msg.From.Bare, StringComparison.CurrentCultureIgnoreCase));
+            Window.AddItem(msg.Body, msg.From.Resource, room.Name);
         }
 
-        void HipchatClient_OnBinded(object sender)
+        void Lobby_OnRoomJoin(object sender, LobbyControl.RoomJoinEventArgs e)
         {
-            //Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add("BIND: " + sender)));
+            MucManager.JoinRoom(new Jid(e.HipchatRoom.RoomID), Name);
+            Window.CreateRoom(e.HipchatRoom.Name);
         }
 
-        void HipchatClient_OnIq(object sender, IQ iq)
-        {
-            Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add("IQ: " + iq)));
-        }
 
         void HipchatClient_OnRosterItem(object sender, agsXMPP.protocol.iq.roster.RosterItem item)
         {
-            Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add("ROST " + item.Name)));
+            Users.Add(item.Name);
         }
 
         void HipchatClient_OnLogin(object sender)
         {
-            IQ iq = new IQ(IqType.get, SelfJid, new Jid("conf.hipchat.com")) { Query = new DiscoItems() };
-            HipchatClient.Send(iq);
-
-            //MucManager.JoinRoom(new Jid("room@conf.hipchat.com"), Name);
-            //HipchatClient.Send(new Message(new Jid("room@conf.hipchat.com"), MessageType.groupchat, "This is a test message. Pls ignore k?"));
-
-
+            HipchatClient.OnIq += (e, mIq) =>
+            {
+                if (mIq.Type == IqType.error) return;
+                DiscoItems item = mIq.Query as DiscoItems;
+                if (item == null) return;
+                var items = item.GetDiscoItems();
+                foreach (HipchatRoom hipChatRoom in items.Select(room => new HipchatRoom(room.Name, room.Jid)))
+                {
+                    Rooms.Add(hipChatRoom);
+                    HipchatRoom room = hipChatRoom;
+                    Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add(room)));
+                }
+            };
+            DiscoManager mgnr = new DiscoManager(HipchatClient);
+            mgnr.DiscoverItems(new Jid("conf.hipchat.com"));
         }
-
-        void HipchatClient_OnPresence(object sender, Presence pres)
-        {
-            Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add("PRES " + pres)));
-        }
-
 
         public override bool OnJoinRoom(string room)
         {
@@ -175,8 +183,10 @@ namespace Chatterbox.Hipchat
 
         public override Gui.MessageBlock OnMessage(string room, string message)
         {
-            //TODO: Parse and such.
-            return string.Empty;
+            HipchatRoom hRoom = Rooms.First(r => r.Name.Equals(room));
+            if (hRoom == null) return message;
+            HipchatClient.Send(new Message(new Jid(hRoom.RoomID), MessageType.groupchat, message));
+            return message;
         }
 
         public static void DoLogin(string username, string password)
@@ -185,7 +195,7 @@ namespace Chatterbox.Hipchat
             {
                 client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                 var responseString = client.UploadString("https://api-static-1.hipchat.com/api/connect_info", "POST", string.Format(LoginFormat, username, password));
-                if (responseString.Contains("Invalid email or password.")) return;
+                if (!responseString.Contains("<response><name>")) return; // The first two tags in a successful login. //
 
                 var loginDataDocument = new XmlDocument();
                 loginDataDocument.LoadXml(responseString);

@@ -30,7 +30,7 @@
         <ListBox Margin="12,12,218,78" Name="lstChat" ItemsSource="{Binding}" BorderBrush="#F777" BorderThickness="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="gui:ChatItem">
-                    <StackPanel>
+                    <StackPanel Background="{Binding Highlight}">
                         <StackPanel.Width>
                             <Binding Path="ActualWidth" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type ScrollContentPresenter}}" />
                         </StackPanel.Width>

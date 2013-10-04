@@ -43,6 +43,9 @@
     <Reference Include="Elysium">
       <HintPath>..\Chatterbox-Desktop\Libs\Elysium.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
@@ -59,6 +62,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
     <Compile Include="HipchatChatPlugin.cs" />
     <Compile Include="LobbyControl.xaml.cs">
       <DependentUpon>LobbyControl.xaml</DependentUpon>
@@ -87,6 +91,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -116,7 +121,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cp $(TargetPath) $(SolutionDir)$(SolutionName)\bin\$(ConfigurationName)\Plugins\$(TargetFileName)
-cp agsXMPP.dll $(SolutionDir)$(SolutionName)\bin\$(ConfigurationName)\agsXMPP.dll</PostBuildEvent>
+cp agsXMPP.dll $(SolutionDir)$(SolutionName)\bin\$(ConfigurationName)\agsXMPP.dll
+cp Newtonsoft.Json.dll $(SolutionDir)$(SolutionName)\bin\$(ConfigurationName)\Newtonsoft.Json.dll</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

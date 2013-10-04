@@ -103,16 +103,22 @@ namespace Chatterbox.Hipchat
 
         internal static Gui.MainWindow Window;
 
+        internal static Configuration Config;
+
         public override void OnLoad(Gui.MainWindow window)
         {
+            Config = Configuration.Load();
+
             Window = window;
 
-            var loginWindow = new LoginWindow();
+            var loginWindow = new LoginWindow { txtUsername = { Text = Config.Email } };
             if (!loginWindow.ShowDialog().HasValue || LoginData == null)
             {
                 window.Close();
                 return;
             }
+
+            Config.Email = loginWindow.Username;
 
             SelfJid = new Jid(Nickname + "@chat.hipchat.com");
 
@@ -125,7 +131,7 @@ namespace Chatterbox.Hipchat
             HipchatClient.AutoResolveConnectServer = false;
             HipchatClient.OnLogin += HipchatClient_OnLogin;
 
-            MucManager = new MucManager(HipchatClient); 
+            MucManager = new MucManager(HipchatClient);
 
             HipchatClient.OnRosterStart += sender => Users.Clear();
             HipchatClient.OnRosterItem += HipchatClient_OnRosterItem;

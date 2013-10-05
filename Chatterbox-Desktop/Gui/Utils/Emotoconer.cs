@@ -178,9 +178,9 @@ namespace Chatterbox.Gui.Utils
             for (int i = 0; i < Emotocons.Count; )
             {
                 Emotocon e = Emotocons[i++];
-                for (int other = i; other < Emotocons.Count; other++)
+                for (int other = i; other < Emotocons.Count; )
                 {
-                    Emotocon e2 = Emotocons[other];
+                    Emotocon e2 = Emotocons[other++];
                     foreach (string s2 in e2.Atlases)
                     {
                         foreach (string s in e.Atlases.Where(s => s.Equals(s2, StringComparison.InvariantCultureIgnoreCase)))

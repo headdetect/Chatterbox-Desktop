@@ -1,19 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Windows.Documents;
+using agsXMPP;
 
 namespace Chatterbox.Hipchat.Model
 {
     public class HipchatRoom
     {
         public string Name { get; set; }
-        public string RoomID { get; set; }
+        public Jid RoomId { get; set; }
 
-        internal HipchatRoom(string name, string roomID)
+        public Jid RoomAdmin { get; set; }
+        public bool Archived { get; set; }
+
+        public List<string> Users = new List<string>();
+
+        public HipchatRoom(string name, string roomId)
         {
             Name = name;
-            RoomID = roomID;
+            RoomId = new Jid(roomId);
+        }
+
+        public HipchatRoom(string name, Jid roomId)
+        {
+            Name = name;
+            RoomId = roomId;
         }
 
         public override string ToString()

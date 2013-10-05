@@ -12,6 +12,7 @@ using agsXMPP.protocol.client;
 using agsXMPP.protocol.component;
 using agsXMPP.protocol.iq.browse;
 using agsXMPP.protocol.iq.disco;
+using agsXMPP.protocol.iq.roster;
 using agsXMPP.protocol.x.muc;
 using agsXMPP.Xml.Dom;
 using Chatterbox.Hipchat.Model;
@@ -23,7 +24,7 @@ namespace Chatterbox.Hipchat
     class HipchatChatPlugin : ChatPlugin
     {
         internal const string LoginFormat = "version=1.20130116182826&email={0}&tls=1&password={1}";
-        internal static List<string> Users = new List<string>();
+        internal static List<RosterItem> Users = new List<RosterItem>();
         internal static XmlElement LoginData;
 
         internal static XmppClientConnection HipchatClient;
@@ -105,7 +106,7 @@ namespace Chatterbox.Hipchat
 
         internal static Configuration Config;
 
-        public override void OnLoad(Gui.MainWindow window)
+        public override bool OnLoad(Gui.MainWindow window)
         {
             Config = Configuration.Load();
 
@@ -114,11 +115,15 @@ namespace Chatterbox.Hipchat
             var loginWindow = new LoginWindow { txtUsername = { Text = Config.Email } };
             if (!loginWindow.ShowDialog().HasValue || LoginData == null)
             {
-                window.Close();
-                return;
+                return false;
             }
 
             Config.Email = loginWindow.Username;
+
+            if (loginWindow.chkRemember.IsChecked != null && loginWindow.chkRemember.IsChecked.Value)
+            {
+                Config.Save();
+            }
 
             SelfJid = new Jid(Nickname + "@chat.hipchat.com");
 
@@ -136,30 +141,49 @@ namespace Chatterbox.Hipchat
             HipchatClient.OnRosterStart += sender => Users.Clear();
             HipchatClient.OnRosterItem += HipchatClient_OnRosterItem;
             HipchatClient.OnMessage += HipchatClient_OnMessage;
+            HipchatClient.OnPresence += HipchatClient_OnPresence;
 
             Lobby = new LobbyControl();
             Lobby.OnRoomJoin += Lobby_OnRoomJoin;
 
+
             Window.SetLobbyRoom(Lobby);
 
+            return true;
         }
+
+        void HipchatClient_OnPresence(object sender, agsXMPP.protocol.client.Presence pres)
+        {
+            HipchatRoom room = Rooms.FirstOrDefault(rm => rm.RoomId.Bare.StartsWith(pres.From.Bare, StringComparison.CurrentCultureIgnoreCase));
+            if (room == null) return;
+
+            if(!room.Users.Contains(pres.From.Resource))
+                room.Users.Add(pres.From.Resource);
+
+            Window.SetUsers(room.Users.ToArray(), room.Name);
+
+            Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add(pres.ToString())));
+        }
+
 
         void HipchatClient_OnMessage(object sender, Message msg)
         {
-            HipchatRoom room = Rooms.First(rm => rm.RoomID.StartsWith(msg.From.Bare, StringComparison.CurrentCultureIgnoreCase));
+            HipchatRoom room = Rooms.FirstOrDefault(rm => rm.RoomId.Bare.StartsWith(msg.From.Bare, StringComparison.CurrentCultureIgnoreCase));
+            if (room == null) return;
             Window.AddItem(msg.Body, msg.From.Resource, room.Name);
         }
 
         void Lobby_OnRoomJoin(object sender, LobbyControl.RoomJoinEventArgs e)
-        {
-            MucManager.JoinRoom(new Jid(e.HipchatRoom.RoomID), Name);
+        {           
+            MucManager.JoinRoom(new Jid(e.HipchatRoom.RoomId), Name);
+
             Window.CreateRoom(e.HipchatRoom.Name);
         }
 
 
-        void HipchatClient_OnRosterItem(object sender, agsXMPP.protocol.iq.roster.RosterItem item)
+        void HipchatClient_OnRosterItem(object sender, RosterItem item)
         {
-            Users.Add(item.Name);
+            Users.Add(item);
         }
 
         void HipchatClient_OnLogin(object sender)
@@ -181,17 +205,11 @@ namespace Chatterbox.Hipchat
             mgnr.DiscoverItems(new Jid("conf.hipchat.com"));
         }
 
-        public override bool OnJoinRoom(string room)
-        {
-            //TODO: Open SelectRoomWindow.xaml
-            return true;
-        }
-
         public override Gui.MessageBlock OnMessage(string room, string message)
         {
-            HipchatRoom hRoom = Rooms.First(r => r.Name.Equals(room));
+            HipchatRoom hRoom = Rooms.FirstOrDefault(r => r.Name.Equals(room));
             if (hRoom == null) return message;
-            HipchatClient.Send(new Message(new Jid(hRoom.RoomID), MessageType.groupchat, message));
+            HipchatClient.Send(new Message(new Jid(hRoom.RoomId), MessageType.groupchat, message));
             return message;
         }
 

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Chatterbox.Gui.Controls;
 using Chatterbox.Plugins;
+using Elysium;
 
 namespace Chatterbox.Gui
 {
@@ -31,16 +33,14 @@ namespace Chatterbox.Gui
                 handle.OnMessage(e.Room, e.Message);
         }
 
-        #region UI Events
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            foreach (var handle in Plugins)
-                handle.OnLoad(this);
+            foreach (var notUsed in Plugins.Where(handle => !handle.OnLoad(this)))
+            {
+                // TODO: Elysium has bug. Can't use this.Close(); 
+                Environment.Exit(0);
+            }
         }
-
-
-        #endregion
 
         private void tbControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -121,7 +121,7 @@ namespace Chatterbox.Gui
             }));
         }
 
-        public void AddUsers(string[] users, string room)
+        public void SetUsers(string[] users, string room)
         {
             Dispatcher.Invoke(new Action(() =>
             {
@@ -139,7 +139,7 @@ namespace Chatterbox.Gui
 
                     if (window.Room == room)
                     {
-                        window.AddUser(users);
+                        window.SetUsers(users);
                     }
                 }
             }));

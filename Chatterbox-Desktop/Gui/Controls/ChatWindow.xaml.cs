@@ -77,8 +77,9 @@ namespace Chatterbox.Gui.Controls
             lstChat.Items.Add(new ChatItem(user, message));
         }
 
-        internal void AddUser(string[] users)
+        internal void SetUsers(string[] users)
         {
+            lstUsers.Items.Clear();
             for (int i = users.Length - 1; i >= 0; i--)
             {
                 if (string.IsNullOrWhiteSpace(users[i]))

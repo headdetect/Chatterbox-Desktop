@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Chatterbox.Gui.Controls.ChatWindow"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,7 +7,8 @@
              xmlns:src="clr-namespace:Chatterbox;assembly=Chatterbox"
              xmlns:gui="clr-namespace:Chatterbox.Gui"
              xmlns:converters="clr-namespace:Chatterbox.Gui.Converters"
-             Name="chatWindow"
+             xmlns:params="http://schemas.codeplex.com/elysium/params" x:Class="Chatterbox.Gui.Controls.ChatWindow"
+             x:Name="chatWindow"
              mc:Ignorable="d" 
              d:DesignHeight="454" d:DesignWidth="818">
     <UserControl.Resources>
@@ -15,26 +16,23 @@
 
         <!-- is actually used -->
         <Style TargetType="{x:Type Hyperlink}">
+            <Setter Property="Foreground" Value="SteelBlue" />
+            <Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="DarkSlateBlue" />
                 </Trigger>
             </Style.Triggers>
-            <Setter Property="Foreground" Value="SteelBlue" />
-            <Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
         </Style>
     </UserControl.Resources>
-    <Grid>
-        <TextBox Margin="12,0,298,12" Name="txtMessage" Height="60" VerticalAlignment="Bottom" FontFamily="Calibri" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" VerticalContentAlignment="Top" KeyDown="txtMessage_KeyDown" BorderThickness="1"/>
-        <Button Content="Send" Height="60" HorizontalAlignment="Right" Margin="0,0,218,12" Name="btnSend" VerticalAlignment="Bottom" Width="74" Click="btnSend_Click" />
-        <ListBox Margin="12,12,218,78" Name="lstChat" ItemsSource="{Binding}" BorderBrush="#F777" BorderThickness="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingStackPanel.VirtualizationMode="Recycling">
+    <Grid params:Design.Theme="Light">
+        <TextBox Margin="12,0,298,12" x:Name="txtMessage" Height="60" VerticalAlignment="Bottom" FontFamily="Calibri" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" VerticalContentAlignment="Top" KeyDown="txtMessage_KeyDown" BorderThickness="1"/>
+        <Button Content="Send" Height="60" HorizontalAlignment="Right" Margin="0,0,218,12" x:Name="btnSend" VerticalAlignment="Bottom" Width="74" Click="btnSend_Click" />
+        <ListBox Margin="12,12,218,78" x:Name="lstChat" ItemsSource="{Binding}" BorderBrush="#F777" BorderThickness="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingStackPanel.VirtualizationMode="Standard"  params:Design.AccentBrush="{x:Static metro:AccentBrushes.Purple}" params:Design.Theme="Light">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="gui:ChatItem">
-                    <StackPanel Background="{Binding Highlight}">
-                        <StackPanel.Width>
-                            <Binding Path="ActualWidth" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type ScrollContentPresenter}}" />
-                        </StackPanel.Width>
-                        <Grid>
+                    <StackPanel Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ScrollContentPresenter}, Mode=FindAncestor}}">
+                        <Grid Background="{Binding Highlight}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="100*" />
@@ -42,7 +40,7 @@
                             </Grid.ColumnDefinitions>
                             <DockPanel Width="100">
                                 <Viewbox Stretch="Fill" StretchDirection="DownOnly" HorizontalAlignment="Right" Width="100">
-                                    <Label Content="{Binding Username}" FontWeight="Bold"  Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}, Path=Foreground}" Name="lblUsername" FontFamily="Segoe UI" HorizontalAlignment="Right" />
+                                    <Label Content="{Binding Username}" FontWeight="Bold"  Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}, Mode=FindAncestor}}" x:Name="lblUsername" FontFamily="Segoe UI" HorizontalAlignment="Right" />
                                 </Viewbox>
                             </DockPanel>
                             <ContentControl Content="{Binding Message, Converter={StaticResource stringXmlConverter}, Mode=OneTime}" Grid.Column="1" MinHeight="40" HorizontalAlignment="Left" />
@@ -50,19 +48,13 @@
                         </Grid>
                     </StackPanel>
                 </DataTemplate>
-
             </ListBox.ItemTemplate>
             <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Style.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{Binding Color, Source={x:Static metro:AccentBrushes.Purple}}"/>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White" />
-                    </Style.Resources>
-                    <Setter Property="BorderBrush" Value="#FAAA" />
-                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Focusable" Value="False"/>
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>
-        <ListBox Margin="0,12,12,12" Name="lstUsers" HorizontalAlignment="Right" Width="200" BorderBrush="#F777" BorderThickness="1" />
+        <ListBox Margin="0,12,12,12" x:Name="lstUsers" HorizontalAlignment="Right" Width="200" BorderBrush="#F777" BorderThickness="1" />
     </Grid>
 </UserControl>

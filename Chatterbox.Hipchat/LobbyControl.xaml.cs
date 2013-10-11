@@ -37,6 +37,56 @@ namespace Chatterbox.Hipchat
                 OnRoomJoin(this, new RoomJoinEventArgs(room));
         }
 
+        private void btnCreateRoom_Click(object sender, RoutedEventArgs e)
+        {
+            // HipchatChatPlugin.MucManager.CreateReservedRoom();
+        }
+
+        private void lstRooms_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            btnJoin.IsEnabled = lstRooms.SelectedIndex != -1;
+        }
+
+        private void btnCreateRoom_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!HipchatChatPlugin.IsAdmin)
+            {
+                btnCreateRoom.Visibility = Visibility.Hidden;
+            }
+        }
+
+
+        public void DoRoomCheck()
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                lstRooms.Items.Clear();
+                foreach (var room in HipchatChatPlugin.Rooms)
+                    lstRooms.Items.Add(room);
+
+                if (!HipchatChatPlugin.IsAdmin)
+                {
+                    btnCreateRoom.Visibility = Visibility.Hidden;
+                }
+            }));
+        }
+
+        public void DoUserCheck()
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                lstUsers.Items.Clear();
+                foreach (var room in HipchatChatPlugin.Users)
+                    lstUsers.Items.Add(room);
+
+                if (!HipchatChatPlugin.IsAdmin)
+                {
+                    btnCreateRoom.Visibility = Visibility.Hidden;
+                }
+            }));
+        }
+
+
         public class RoomJoinEventArgs : EventArgs
         {
             public HipchatRoom HipchatRoom { get; set; }
@@ -46,5 +96,36 @@ namespace Chatterbox.Hipchat
                 HipchatRoom = room;
             }
         }
+
+        private void TextBlock_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+            HipchatRoom room = new HipchatRoom("i", "");
+
+            if (OnRoomJoin != null)
+                OnRoomJoin(this, new RoomJoinEventArgs(room));
+        }
+
+        #region Custom Event
+        private int _clickCount = 0;
+        private DateTime _lastClick = DateTime.Now;
+        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _clickCount++;
+
+            if ((DateTime.Now - _lastClick).Milliseconds > 100)
+            {
+                _clickCount = 0;
+            }
+
+            if (_clickCount >= 2)
+            {
+                _clickCount = 0;
+                TextBlock_MouseDoubleClick(sender, e);
+            }
+
+            _lastClick = DateTime.Now;
+        }
+        #endregion
     }
 }

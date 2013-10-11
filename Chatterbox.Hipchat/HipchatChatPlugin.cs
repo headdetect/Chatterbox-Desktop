@@ -152,7 +152,7 @@ namespace Chatterbox.Hipchat
             return true;
         }
 
-        void HipchatClient_OnPresence(object sender, agsXMPP.protocol.client.Presence pres)
+        static void HipchatClient_OnPresence(object sender, agsXMPP.protocol.client.Presence pres)
         {
             HipchatRoom room = Rooms.FirstOrDefault(rm => rm.RoomId.Bare.StartsWith(pres.From.Bare, StringComparison.CurrentCultureIgnoreCase));
             if (room == null) return;
@@ -162,18 +162,18 @@ namespace Chatterbox.Hipchat
 
             Window.SetUsers(room.Users.ToArray(), room.Name);
 
-            Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add(pres.ToString())));
+            // Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add(pres.ToString())));
         }
 
 
-        void HipchatClient_OnMessage(object sender, Message msg)
+        static void HipchatClient_OnMessage(object sender, Message msg)
         {
             HipchatRoom room = Rooms.FirstOrDefault(rm => rm.RoomId.Bare.StartsWith(msg.From.Bare, StringComparison.CurrentCultureIgnoreCase));
             if (room == null) return;
             Window.AddItem(msg.Body, msg.From.Resource, room.Name);
         }
 
-        void Lobby_OnRoomJoin(object sender, LobbyControl.RoomJoinEventArgs e)
+        static void Lobby_OnRoomJoin(object sender, LobbyControl.RoomJoinEventArgs e)
         {           
             MucManager.JoinRoom(new Jid(e.HipchatRoom.RoomId), Name);
 
@@ -181,12 +181,13 @@ namespace Chatterbox.Hipchat
         }
 
 
-        void HipchatClient_OnRosterItem(object sender, RosterItem item)
+        static void HipchatClient_OnRosterItem(object sender, RosterItem item)
         {
-            Users.Add(item);
+            Users.Add(item); 
+            Lobby.DoUserCheck();
         }
 
-        void HipchatClient_OnLogin(object sender)
+        static void HipchatClient_OnLogin(object sender)
         {
             HipchatClient.OnIq += (e, mIq) =>
             {
@@ -197,8 +198,7 @@ namespace Chatterbox.Hipchat
                 foreach (HipchatRoom hipChatRoom in items.Select(room => new HipchatRoom(room.Name, room.Jid)))
                 {
                     Rooms.Add(hipChatRoom);
-                    HipchatRoom room = hipChatRoom;
-                    Lobby.Dispatcher.Invoke(new Action(() => Lobby.lstRooms.Items.Add(room)));
+                    Lobby.DoRoomCheck();
                 }
             };
             DiscoManager mgnr = new DiscoManager(HipchatClient);
@@ -213,17 +213,31 @@ namespace Chatterbox.Hipchat
             return message;
         }
 
+        private static bool _reconnectedOnSslFail;
         public static void DoLogin(string username, string password)
         {
-            using (var client = new WebClient())
+            try
             {
-                client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                var responseString = client.UploadString("https://api-static-1.hipchat.com/api/connect_info", "POST", string.Format(LoginFormat, username, password));
-                if (!responseString.Contains("<response><name>")) return; // The first two tags in a successful login. //
+                using (var client = new WebClient())
+                {
+                    client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                    var responseString = client.UploadString("https://api-static-1.hipchat.com/api/connect_info", "POST", string.Format(LoginFormat, username, password));
+                    if (!responseString.Contains("<response><name>")) return; // The first two tags in a successful login. //
 
-                var loginDataDocument = new XmlDocument();
-                loginDataDocument.LoadXml(responseString);
-                LoginData = loginDataDocument["response"];
+                    var loginDataDocument = new XmlDocument();
+                    loginDataDocument.LoadXml(responseString);
+                    LoginData = loginDataDocument["response"];
+                }
+            }
+            catch(WebException e)
+            {
+                if (e.Message.Contains("SSL") && !_reconnectedOnSslFail)
+                {
+                    _reconnectedOnSslFail = true;
+
+                    // Sometimes the ssl certificate can't be verified until you try it again... //
+                    DoLogin(username, password);
+                }
             }
         }
     }

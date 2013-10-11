@@ -3,15 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:model="clr-namespace:Chatterbox.Hipchat.Model"
              mc:Ignorable="d" d:DesignWidth="529" d:DesignHeight="354" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
     <Grid Margin="10,10,6,10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="41*"/>
-            <ColumnDefinition Width="263*"/>
-        </Grid.ColumnDefinitions>
-        <ListBox x:Name="lstRooms" Margin="10,10,10,48" Grid.ColumnSpan="2" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
-        <TextBlock HorizontalAlignment="Left" Margin="10,0,0,10" TextWrapping="Wrap" Text="//TODO: Make this not ugly" Foreground="#FF1A931A" Grid.ColumnSpan="2"
-                   Grid.Column="0" Height="16" VerticalAlignment="Bottom"/>
-        <Button x:Name="btnJoin" Content="Join" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="33" Click="btnJoin_Click" Grid.Column="1" HorizontalAlignment="Right" Width="95"/>
+        <ListBox x:Name="lstRooms" Margin="10,10,160,60" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" SelectionChanged="lstRooms_SelectionChanged" />
+        <ListBox x:Name="lstUsers" HorizontalAlignment="Right" ItemsSource="{Binding}" Margin="0,10,10,10" Width="145" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="model:HipchatUser">
+                    <TextBlock Text="{Binding Name}" MouseDown="TextBlock_MouseDown"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button x:Name="btnJoin" Content="Join Room" HorizontalAlignment="Right" Margin="0,0,160,10" VerticalAlignment="Bottom" Width="86" Height="45" IsEnabled="False" Click="btnJoin_Click"/>
+        <Button x:Name="btnCreateRoom" Content="Create Room" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="96" Height="45" Loaded="btnCreateRoom_Loaded" Click="btnCreateRoom_Click"/>
     </Grid>
 </UserControl>
